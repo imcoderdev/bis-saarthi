@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "app/api/standard/route.ts": { "maxDuration": 20 },
+    "app/api/pdf-info/route.ts": { "maxDuration": 20 },
+    "app/api/labs/route.ts": { "maxDuration": 20 }
+  }
+}
