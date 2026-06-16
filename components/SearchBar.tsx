@@ -34,8 +34,8 @@ export default function SearchBar({ value, onChange, onSearch, loading }: Search
           onChange={e => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={loading}
-          placeholder="302, 1234, 9000 — Enter any IS number"
-          className="flex-1 px-3 py-4 text-base text-[#0F172A] placeholder-gray-400 bg-transparent outline-none disabled:opacity-60"
+          placeholder="Enter IS number (e.g. 302)..."
+          className="flex-1 min-w-0 px-3 py-4 text-sm sm:text-base text-[#0F172A] placeholder-gray-400 bg-transparent outline-none disabled:opacity-60"
           autoComplete="off"
           spellCheck="false"
         />
@@ -49,12 +49,12 @@ export default function SearchBar({ value, onChange, onSearch, loading }: Search
           {loading ? (
             <>
               <Spinner />
-              <span className="hidden sm:inline">Searching…</span>
+              <span className="hidden md:inline">Searching…</span>
             </>
           ) : (
             <>
               <SearchIcon />
-              <span className="hidden sm:inline">Search</span>
+              <span className="hidden md:inline">Search</span>
             </>
           )}
         </button>
