@@ -236,7 +236,7 @@ export async function scrapeLabs(isNum: string): Promise<LabsData | LabsError> {
   try {
     const res = await fetch(fetchUrl, {
       headers,
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(60000),
     });
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -365,7 +365,6 @@ export async function scrapeLabs(isNum: string): Promise<LabsData | LabsError> {
     return result;
   } catch {
     const errResult: LabsError = { error: true, total: 0, labs: [], sections: [], states: [], directUrl };
-    setCache(cacheKey, errResult);
     return errResult;
   }
 }

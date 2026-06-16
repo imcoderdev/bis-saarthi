@@ -53,7 +53,7 @@ export async function scrapeStandard(isNum: string): Promise<StandardData | Stan
   try {
     const res = await fetch(primaryUrl, {
       headers,
-      signal: AbortSignal.timeout(12000),
+      signal: AbortSignal.timeout(20000),
     });
     if (res.ok) {
       html = await res.text();
@@ -64,7 +64,7 @@ export async function scrapeStandard(isNum: string): Promise<StandardData | Stan
     try {
       const res = await fetch(fallbackUrl, {
         headers,
-        signal: AbortSignal.timeout(12000),
+        signal: AbortSignal.timeout(20000),
       });
       if (res.ok) {
         html = await res.text();
@@ -74,7 +74,6 @@ export async function scrapeStandard(isNum: string): Promise<StandardData | Stan
       }
     } catch {
       const errResult: StandardError = { error: true, directUrl: primaryUrl };
-      setCache(cacheKey, errResult);
       return errResult;
     }
   }
@@ -184,7 +183,6 @@ export async function scrapeStandard(isNum: string): Promise<StandardData | Stan
     return result;
   } catch {
     const errResult: StandardError = { error: true, directUrl: primaryUrl };
-    setCache(cacheKey, errResult);
     return errResult;
   }
 }

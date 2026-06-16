@@ -44,17 +44,17 @@ export default function SearchBar({ value, onChange, onSearch, loading }: Search
           id="search-button"
           onClick={() => !loading && onSearch(value)}
           disabled={loading || !value.trim()}
-          className="flex-shrink-0 m-2 px-6 py-3 bg-[#E8741E] hover:bg-[#cf621a] disabled:bg-[#e8741e99] text-white font-semibold rounded-xl transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
+          className="flex-shrink-0 m-2 px-4 sm:px-6 py-3 bg-[#E8741E] hover:bg-[#cf621a] disabled:bg-[#e8741e99] text-white font-semibold rounded-xl transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95 text-xs sm:text-sm"
         >
           {loading ? (
             <>
               <Spinner />
-              <span>Searching…</span>
+              <span className="hidden sm:inline">Searching…</span>
             </>
           ) : (
             <>
               <SearchIcon />
-              <span>Search</span>
+              <span className="hidden sm:inline">Search</span>
             </>
           )}
         </button>

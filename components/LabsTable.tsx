@@ -223,7 +223,7 @@ export default function LabsTable({ data, loading }: LabsTableProps) {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex overflow-x-auto pb-4 md:grid md:grid-cols-3 gap-4 snap-x -mx-6 px-6 md:mx-0 md:px-0">
           {recommendedLabs.map((lab, index) => {
             const isBudget = lab.price > 0 && minPrice > 0 && lab.price <= minPrice * 1.1;
             const hasExclusions = lab.exclusionCount > 0;
@@ -232,7 +232,7 @@ export default function LabsTable({ data, loading }: LabsTableProps) {
             return (
               <div
                 key={lab.labCode || index}
-                className="bg-white rounded-xl border border-gray-150 p-4 shadow-sm hover:shadow-md hover:border-[#1B3A6B]/30 transition-all duration-200 flex flex-col justify-between relative overflow-hidden group"
+                className="w-[280px] md:w-auto shrink-0 snap-start bg-white rounded-xl border border-gray-150 p-4 shadow-sm hover:shadow-md hover:border-[#1B3A6B]/30 transition-all duration-200 flex flex-col justify-between relative overflow-hidden group"
               >
                 {/* Visual rank indicator */}
                 <div className="absolute top-0 right-0 bg-gray-100 text-gray-400 text-[10px] font-extrabold px-2 py-0.5 rounded-bl-lg">
@@ -427,7 +427,8 @@ export default function LabsTable({ data, loading }: LabsTableProps) {
         </div>
 
         {/* Labs Table */}
-        <div className="overflow-x-auto -mx-6 px-6">
+        {/* Desktop Labs Table */}
+        <div className="hidden lg:block overflow-x-auto -mx-6 px-6">
           <table className="w-full text-xs" id="labs-table">
             <thead>
               <tr className="border-b border-gray-150">
@@ -586,6 +587,102 @@ export default function LabsTable({ data, loading }: LabsTableProps) {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card List View */}
+        <div className="block lg:hidden space-y-3">
+          {processedLabs.map((lab, idx) => {
+            const isExpanded = expandedLabCode === lab.labCode;
+            const isBudget = lab.price > 0 && minPrice > 0 && lab.price <= minPrice * 1.1;
+
+            return (
+              <div
+                key={lab.labCode || idx}
+                onClick={() => toggleExpand(lab.labCode)}
+                className="bg-white border border-gray-150 rounded-xl p-4 shadow-sm hover:border-[#1B3A6B]/30 transition-all cursor-pointer space-y-3"
+              >
+                <div className="flex justify-between items-start gap-2">
+                  <div className="max-w-[70%]">
+                    <h4 className="font-semibold text-gray-800 text-xs flex flex-wrap items-center gap-1.5 leading-relaxed">
+                      {lab.name}
+                      {isBudget && (
+                        <span className="bg-green-50 text-green-700 text-[9px] font-bold px-1 rounded">
+                          Budget
+                        </span>
+                      )}
+                    </h4>
+                    <p className="text-[10px] text-gray-400 mt-1">📍 {lab.city}{lab.state ? `, ${lab.state}` : ''}</p>
+                  </div>
+                  <span className="text-[10px] font-mono bg-gray-50 text-gray-600 px-2 py-0.5 rounded border border-gray-100 shrink-0">
+                    {lab.labCode || '—'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 bg-gray-50 rounded-lg p-2.5 text-[11px]">
+                  <div>
+                    <span className="text-gray-400 block mb-0.5">Testing Fee</span>
+                    <strong className="text-gray-700">
+                      {lab.price > 0 ? `₹${lab.price.toLocaleString('en-IN')}` : 'Variable'}
+                    </strong>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block mb-0.5">Exclusions</span>
+                    <span className={lab.exclusionCount > 0 ? 'text-amber-600 font-semibold' : 'text-green-600 font-semibold'}>
+                      {lab.exclusionCount > 0 ? `${lab.exclusionCount} Clauses` : 'Full Coverage'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action arrow / expand toggle */}
+                <div className="flex justify-between items-center pt-2 border-t border-gray-100 text-[10px]">
+                  <span className="text-gray-400 truncate max-w-[200px]" title={lab.remarks}>
+                    {lab.remarks || 'No remarks'}
+                  </span>
+                  <button className="text-[#E8741E] font-semibold shrink-0">
+                    {isExpanded ? 'Hide Info ▲' : 'Show Info ▼'}
+                  </button>
+                </div>
+
+                {/* Expanded detail section */}
+                {isExpanded && (
+                  <div className="pt-3 border-t border-gray-150 grid grid-cols-1 gap-3 text-[11px] text-gray-600">
+                    <div className="space-y-1">
+                      <span className="text-[#1B3A6B] font-bold block text-[10px] uppercase tracking-wide">📍 Location Details</span>
+                      <p className="text-gray-700 leading-relaxed">{lab.address || 'Address not listed'}</p>
+                      <p className="text-gray-500">Pincode: {lab.pincode || '—'}</p>
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[#1B3A6B] font-bold block text-[10px] uppercase tracking-wide">📞 Contact Information</span>
+                      <p><span className="text-gray-400 mr-1">Person:</span> <strong>{lab.contactPerson || 'Not listed'}</strong></p>
+                      {lab.phone && (
+                        <p>
+                          <span className="text-gray-400 mr-1">Phone:</span>
+                          <a href={`tel:${lab.phone}`} className="text-[#E8741E] font-semibold hover:underline" onClick={e => e.stopPropagation()}>
+                            {lab.phone}
+                          </a>
+                        </p>
+                      )}
+                      {lab.email && (
+                        <p>
+                          <span className="text-gray-400 mr-1">Email:</span>
+                          <a href={`mailto:${lab.email}`} className="text-[#E8741E] font-semibold hover:underline break-all" onClick={e => e.stopPropagation()}>
+                            {lab.email}
+                          </a>
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[#1B3A6B] font-bold block text-[10px] uppercase tracking-wide">📝 Scope Remarks</span>
+                      <p className="text-gray-700 leading-relaxed">{lab.remarks || 'No exclusions or remarks listed.'}</p>
+                      <p className="text-gray-400 italic">Part/Section: {lab.section}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {processedLabs.length === 0 && (

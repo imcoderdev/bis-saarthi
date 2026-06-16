@@ -49,7 +49,7 @@ export async function scrapePDFInfo(isNum: string): Promise<PDFData | PDFError> 
   try {
     const res = await fetch(bsbUrl, {
       headers,
-      signal: AbortSignal.timeout(12000),
+      signal: AbortSignal.timeout(20000),
     });
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -151,7 +151,6 @@ export async function scrapePDFInfo(isNum: string): Promise<PDFData | PDFError> 
     return result;
   } catch {
     const errResult: PDFError = { error: true, bsbUrl };
-    setCache(cacheKey, errResult);
     return errResult;
   }
 }
